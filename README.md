@@ -3,8 +3,9 @@ Anonymous "Paper ID 5610".  International Conference on Computer Vision (ICCV). 
 
 ## Overview of our framework.
 <p align="center">
-    <img src='./images/overall_pineline.png' width=500  alt="overall pineline">
+    <img src='./images/overall_pineline-min.png' width=800  alt="overall pineline">
 <p>
+
 ## Datasets
 * NeuralTextures
 * DeepFakes
@@ -14,5 +15,5 @@ Anonymous "Paper ID 5610".  International Conference on Computer Vision (ICCV). 
 
 ## Grad-CAM
 <p align="center">
-    <img src='./images/gradcam.png' width=500 alt="Grad-CAM">
+    <img src='./images/gradcam-min.png' width=800 alt="Grad-CAM">
 <p>
