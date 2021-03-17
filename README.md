@@ -16,6 +16,11 @@ Paper ID 5610
 * Face2Face [[Dataset]](https://github.com/ondyari/FaceForensics) [[Paper]](https://arxiv.org/abs/2007.14808)
 * FaceSwap [[Dataset]](https://github.com/ondyari/FaceForensics) [[GitHub]](https://github.com/deepfakes/faceswap)
 * FaceShifter [[Dataset]](https://github.com/ondyari/FaceForensics)  [[Paper]](https://arxiv.org/abs/1912.13457) 
+## Results
+<p align="center">
+    __Table 1__: Experimental results of our proposed method and other seven different baseline approaches on five different deepfakedatasets.
+    <img src="https://i.ibb.co/R7Wdw4F/results.png" width="740" alt="Experiment results">
+<p>
 
 ## Grad-CAM
 <p align="center">
