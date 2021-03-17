@@ -7,7 +7,7 @@ Paper ID 5610
 
 ## Overview of our framework.
 <p align="center">
-    <img src='./images/overall_pipeline-min.png' width="740" alt="overall pipeline">
+    <img src='./images/overall_pipeline.pdf' width="740" alt="overall pipeline">
 <p>
 
 ## Datasets
@@ -19,5 +19,5 @@ Paper ID 5610
 
 ## Grad-CAM
 <p align="center">
-    <img src='./images/gradcam-min.png' width="740" alt="Grad-CAM">
+    <img src='./images/gradcam.pdf' width="740" alt="Grad-CAM">
 <p>
