@@ -18,7 +18,7 @@ Paper ID 5610
 * FaceShifter [[Dataset]](https://github.com/ondyari/FaceForensics)  [[Paper]](https://arxiv.org/abs/1912.13457) 
 ## Results
 <p align="center">
-    __Table 1__: Experimental results of our proposed method and other seven different baseline approaches on five different deepfakedatasets.
+    ** Table 1 **: Experimental results of our proposed method and other seven different baseline approaches on five different deepfakedatasets.
     <img src="https://i.ibb.co/R7Wdw4F/results.png" width="740" alt="Experiment results">
 <p>
 
