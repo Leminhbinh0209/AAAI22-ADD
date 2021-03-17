@@ -1,9 +1,13 @@
-# Title - Paper ID 5610
-Anonymous "Paper ID 5610".  International Conference on Computer Vision (ICCV). 2021. Montreal, Canada
+# ADD: Frequency Attention and Multi-View based Knowledge Distillation to Detect Low-Quality Compressed Deepfake Images
+Anonymous, "ADD: Frequency Attention and Multi-View based Knowledge Distillation to Detect Low-Quality Compressed Deepfake Images."  <br /> 
+International Conference on Computer Vision (ICCV). 2021. Montreal, Canada. <br /> 
+Paper ID 5610 
+
+
 
 ## Overview of our framework.
 <p align="center">
-    <img src='./images/overall_pipeline-min.png' width="220" height="240"  alt="overall pipeline">
+    <img src='./images/overall_pipeline-min.png' width="740" alt="overall pipeline">
 <p>
 
 ## Datasets
@@ -15,5 +19,5 @@ Anonymous "Paper ID 5610".  International Conference on Computer Vision (ICCV). 
 
 ## Grad-CAM
 <p align="center">
-    <img src='./images/gradcam-min.png' width="220" height="240" alt="Grad-CAM">
+    <img src='./images/gradcam-min.png' width="740" alt="Grad-CAM">
 <p>
