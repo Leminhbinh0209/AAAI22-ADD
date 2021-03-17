@@ -5,7 +5,7 @@ Paper ID 5610
 
 
 
-## Overview of our framework.
+## Overview of our framework
 <p align="center">
     <img src="https://i.ibb.co/KmxVRQw/overall-pipeline.png" width="740" alt="overall pipeline">
 <p>
@@ -18,7 +18,7 @@ Paper ID 5610
 * FaceShifter [[Dataset]](https://github.com/ondyari/FaceForensics)  [[Paper]](https://arxiv.org/abs/1912.13457) 
 ## Results
 <p align="center">
-    <strong>Table 1</strong>: Experimental results of our proposed method and other seven different baseline approaches on five different deepfakedatasets.
+    <strong>Table 1</strong>: Experimental results of our proposed method and other seven different baseline approaches on five different deepfake datasets.
     <img src="https://i.ibb.co/R7Wdw4F/results.png" width="740" alt="Experiment results">
 <p>
 
