@@ -5,8 +5,11 @@ Anonymous "Paper ID 5610".  International Conference on Computer Vision (ICCV). 
 <img src='./images/overall_pineline.png' width=1000>
 
 ## Dataset
-
-NeuralTextures, DeepFakes, Face2Face, FaceSwap
+* NeuralTextures
+* DeepFakes
+* Face2Face
+* FaceSwap
+* FaceShifter
 
 ## Grad-CAM
 
