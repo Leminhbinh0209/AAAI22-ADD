@@ -3,7 +3,7 @@ Anonymous "Paper ID 5610".  International Conference on Computer Vision (ICCV). 
 
 ## Overview of our framework.
 <p align="center">
-    <img src='./images/overall_pipeline-min.png' width=800  alt="overall pineline">
+    <img src='./images/overall_pipeline-min.png' width=800  alt="overall pipeline">
 <p>
 
 ## Datasets
