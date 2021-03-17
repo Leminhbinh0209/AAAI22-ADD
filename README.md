@@ -2,9 +2,10 @@
 Anonymous "Paper ID 5610".  International Conference on Computer Vision (ICCV). 2021. Montreal, Canada
 
 ## Overview of our framework.
-<img src='./images/overall_pineline.png' width=1000>
-
-## Dataset
+<p align="center">
+    <img src='./images/overall_pineline.png' width=500  alt="overall pineline">
+<p>
+## Datasets
 * NeuralTextures
 * DeepFakes
 * Face2Face
@@ -12,5 +13,6 @@ Anonymous "Paper ID 5610".  International Conference on Computer Vision (ICCV). 
 * FaceShifter
 
 ## Grad-CAM
-
-<img src='./images/gradcam.png' width=1000>
+<p align="center">
+    <img src='./images/gradcam.png' width=500 alt="Grad-CAM">
+<p>
