@@ -6,7 +6,7 @@ import torch.nn.functional as F
 import numpy as np
 
 class Multiview(nn.Module):
-    """Multi-view attention network"""
+    """Multi-view attention distiller"""
     def __init__(self, p=1, n_theta=10, 
                  gamma=1.0, 
                  eta=0.5, 
@@ -104,35 +104,3 @@ class Multiview(nn.Module):
         return loss
     
     
-    def swd(self, f_s, f_t, idx_sort, value_sort, num_group):
-        if self.normalize :
-            f_s = F.normalize(f_s, dim=-1, p=2) ** 2 ## Sum up to 1 along dim 1
-            f_t = F.normalize(f_t, dim=-1, p=2) ** 2 ## Sum up to 1 along dim 1
-#         f_s = f_s[:, idx_sort].view(f_s.size(0), num_group, -1).sum(dim=-1) ## B x num_group x (C x W x H / num_group) --->mean (C x W x H / num_group)
-#         f_t = f_t[:, idx_sort].view(f_s.size(0), num_group, -1).sum(dim=-1)
-#         return (f_s - f_t).pow(2).mean()
-
-        ## Quantile the project vector
-        quantile = torch.arange(0, 1+1.0/num_group, 1.0/num_group).to(f_s.device)
-
-        value_sort_quantile =  (value_sort[-1] - value_sort[0]) * quantile + value_sort[0] # (max-min )* range + min
-        index_quantile = torch.searchsorted(value_sort, value_sort_quantile)[1:-1] ## Exlude the zero and last
-        index_quantile = index_quantile.unsqueeze(0).repeat(f_s.size(0),1)
-
-        ## Cumulated sumation 
-        c_f_s = torch.cumsum(f_s, dim=-1)
-        c_f_t = torch.cumsum(f_t, dim=-1)
-        
-        ## Using quantile index 
-        c_f_s = c_f_s.gather(1, index_quantile)
-        c_f_t = c_f_t.gather(1, index_quantile)
-        
-        ## Add zero to batch dim
-        c_f_s = torch.cat((torch.zeros(c_f_s.size(0)).unsqueeze(1).to(f_s.device), c_f_s), dim=1)
-        c_f_t = torch.cat((torch.zeros(c_f_t.size(0)).unsqueeze(1).to(f_s.device), c_f_t), dim=1)
-        
-        ## Get sum on each interval
-        i_f_s = c_f_s[:, 1:] - c_f_s[:, :-1]
-        i_f_t = c_f_t[:, 1:] - c_f_t[:, :-1]
-        
-        return torch.abs(i_f_s - i_f_t).pow(self.p).sum(dim=1).mean()

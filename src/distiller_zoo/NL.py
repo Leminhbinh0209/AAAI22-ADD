@@ -5,7 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch import einsum
 
-"""Reference from this work: https://github.com/"""
+
 class NonLocal(nn.Module):
     def __init__(self, reduction="sum"):
         super(NonLocal, self).__init__()
