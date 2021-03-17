@@ -3,7 +3,7 @@ Anonymous "Paper ID 5610".  International Conference on Computer Vision (ICCV). 
 
 ## Overview of our framework.
 <p align="center">
-    <img src='./images/overall_pipeline-min.png' width=800  alt="overall pipeline">
+    <img src='./images/overall_pipeline-min.png' width="220" height="240"  alt="overall pipeline">
 <p>
 
 ## Datasets
@@ -15,5 +15,5 @@ Anonymous "Paper ID 5610".  International Conference on Computer Vision (ICCV). 
 
 ## Grad-CAM
 <p align="center">
-    <img src='./images/gradcam-min.png' width=800 alt="Grad-CAM">
+    <img src='./images/gradcam-min.png' width="220" height="240" alt="Grad-CAM">
 <p>
