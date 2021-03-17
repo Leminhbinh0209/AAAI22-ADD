@@ -10,12 +10,12 @@ Paper ID 5610
     <img src="https://i.ibb.co/KmxVRQw/overall-pipeline.png" width="740" alt="overall pipeline">
 <p>
 
-## Datasets
-* NeuralTextures
-* DeepFakes
-* Face2Face
-* FaceSwap
-* FaceShifter
+## Datasets 
+* NeuralTextures [[Dataset]](https://github.com/ondyari/FaceForensics) [[Paper]](https://arxiv.org/abs/1904.12356) 
+* DeepFakes [[Dataset]](https://github.com/ondyari/FaceForensics)  [[GitHub]](https://github.com/deepfakes/faceswap)
+* Face2Face [[Dataset]](https://github.com/ondyari/FaceForensics) [[Paper]](https://arxiv.org/abs/2007.14808)
+* FaceSwap [[Dataset]](https://github.com/ondyari/FaceForensics) [[GitHub]](https://github.com/deepfakes/faceswap)
+* FaceShifter [[Dataset]](https://github.com/ondyari/FaceForensics)  [[Paper]](https://arxiv.org/abs/1912.13457) 
 
 ## Grad-CAM
 <p align="center">
