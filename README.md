@@ -7,7 +7,7 @@ Paper ID 5610
 
 ## Overview of our framework
 <p align="center">
-    <img src="https://i.ibb.co/KmxVRQw/overall-pipeline.png" width="740" alt="overall pipeline">
+    <img src="https://i.ibb.co/KmxVRQw/overall-pipeline.png" width="960" alt="overall pipeline">
 <p>
 
 ## Datasets 
