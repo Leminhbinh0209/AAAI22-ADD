@@ -24,5 +24,5 @@ Paper ID 5610
 
 ## Grad-CAM
 <p align="center">
-    <img src="https://i.ibb.co/Nyw0L2z/gradcam-fake.png" width="540" alt="Grad-CAM">
+    <img src="https://i.ibb.co/WzKGnCz/gradcam-fake-bb2-background.png" width="540" alt="Grad-CAM">
 <p>
