@@ -1,7 +1,7 @@
 # ADD: Frequency Attention and Multi-View based Knowledge Distillation to Detect Low-Quality Compressed Deepfake Images
 Anonymous, "ADD: Frequency Attention and Multi-View based Knowledge Distillation to Detect Low-Quality Compressed Deepfake Images."  <br /> 
-International Conference on Computer Vision (ICCV). 2021. Montreal, Canada. <br /> 
-Paper ID 5610 
+Thirty-Sixth AAAI Conference on Artificial Intelligence. 2022. Canada <br /> 
+Paper ID 676
 
 
 
