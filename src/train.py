@@ -60,15 +60,6 @@ from resnet_baseline import *
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID" 
 os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
-# Set random seed
-random_seed = 42
-torch.manual_seed(random_seed)
-torch.cuda.manual_seed(random_seed)
-torch.cuda.manual_seed_all(random_seed) 
-torch.backends.cudnn.deterministic = True
-torch.backends.cudnn.benchmark = False
-np.random.seed(random_seed)
-
 
 def JPEGcompression(image, qf):
     outputIoStream = BytesIO()
@@ -117,7 +108,7 @@ class FaceDataset(Dataset):
         return len(self.labels)
     
 def main(config):
-    # ---------------------- LOAD DATA ----------------------
+    #  Load datasets
     current_time = str(time())[:10]
     real_type = 'real'
     fake_type = config.dataset
@@ -155,8 +146,7 @@ def main(config):
     val_loader = DataLoader(val_dataset, batch_size=config.batch_size, shuffle=False, num_workers=config.num_workers)
     test_loader = DataLoader(test_dataset, batch_size=config.batch_size, shuffle=False, num_workers=config.num_workers)
 
-    
-    # ---------------------- DEFINE MODEL ----------------------
+   
     # Create logger and checkpoints directory
     logger_dir = os.path.join(config.result_dir, config.dataset, config.data_quality)
     checkpoint_dir = os.path.join(config.checkpoint_dir, config.dataset, config.data_quality)
@@ -201,11 +191,11 @@ def main(config):
             student_model = nn.DataParallel(student_model, device_ids=device_ids)
     print("Number of student model parameters: ", get_model_parameters(student_model))
     
-    # training parameters
+    # Training parameters
     trainable_list = nn.ModuleList([])
     trainable_list.append(student_model)
 
-    # ---------------------- Loss and Optimizer ----------------------
+    #  Loss and Optimizer 
     criterion_cls = nn.CrossEntropyLoss().cuda()   
 
     if config.is_proj:
@@ -264,12 +254,12 @@ def main(config):
         total_steps=None)
     
         
-    # ---------------------- Backbone features ----------------------
+    #  Backbone features 
     backbone_layers = []
     if "efficientnetb0" in config.model_name: 
         backbone_layers = config.backbone_layers_b0
     
-    # ---------------------- Training phase  ----------------------
+    #  Training phase  
     print(f"***Start training with {fake_type} {config.data_quality}***")
     best_acc = 0.0
     watch_interval = 0
@@ -285,15 +275,14 @@ def main(config):
     
     for epoch in range(1, config.epochs + 1):
         
-        # ===================Start: warming up=====================
+        #  warming up
         if epoch == config.warm_up:
             config.is_freq = True
             # Unfrozen pre-trained params
             watch_interval = 0
             set_trainable(student_model, True, [], device_ids)
             print("Training params: ", count_parameters(student_model))
-            
-        # ----------------------End: warming up----------------------
+     
         
         student_model.train()
         train_fr = AverageMeter()
@@ -303,7 +292,7 @@ def main(config):
         train_acc = AverageMeter()
         train_auroc = AverageMeter()
         
-        # ===================Start: training loop=====================
+        #  Training loop
         for batch_idx, (batch_data_raw, batch_data_com, batch_target) in enumerate(train_loader):
             watch_interval += 1
             
@@ -313,20 +302,17 @@ def main(config):
             
             middle_raw_tensors, batch_raw_feat, batch_raw_pred = teacher_model(batch_data_raw, True, backbone_layers)
             middle_com_tensors, batch_com_feat, batch_com_pred = student_model(batch_data_com, True, backbone_layers)
-            
-            # ===================Start: losses===================
+
             
             loss_fr = 0
             loss_kd = 0
             loss_div = 0
             loss_cls = criterion_cls(batch_com_pred, batch_target)
             
-            # ===================Start: frequency loss=====================
             # Frequency loss
             if config.is_freq:
                 loss_fr = sum(frequecy_loss(middle_com_tensors, middle_raw_tensors, config.layer_fr))
-                
-            # ----------------------End: frequency loss----------------------
+      
             
             # Distillation loss at penulimate layer
             if config.distill == 'hint':
@@ -348,15 +334,14 @@ def main(config):
                     config.lambda_kd * loss_kd + \
                     config.lambda_ce * loss_cls +\
                     config.lambda_div * loss_div
-           
-            # ----------------------End: losses----------------------
+
             
-            # ===================Start: backward=====================
+            #  Backward
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
             lr_scheduler.step()
-            # ----------------------End: backward----------------------
+
             
             acc1 = accuracy(batch_com_pred, batch_target)
             auc = roc_auc_score(batch_target.cpu().detach().numpy(), batch_com_pred.cpu().detach().numpy()[:,1])
@@ -375,7 +360,7 @@ def main(config):
                                      l_fr=train_fr.avg, l_kd=train_kd.avg, l_ce=train_ce.avg, \
                                      loss=train_loss.avg, acc=train_acc.avg, auc=train_auroc.avg))            
             
-            # ===================Start: validation=====================
+            #  Validation
             if (watch_interval == len(train_loader)//10) & (epoch >= config.warm_up):
                 watch_interval = 0
                 
@@ -405,26 +390,25 @@ def main(config):
                         val_auroc.update(auc, batch_data_com.size(0))
 
 
-                sys.stdout.write("\n\t\tValidation:  Loss_CE: {l_ce:.4f} | Acc: {acc:.4f} | AUC: {auc:.4f}\n"
+                sys.stdout.write("Validation:  Loss_CE: {l_ce:.4f} | Acc: {acc:.4f} | AUC: {auc:.4f}"
                                 .format( l_ce=val_ce.avg,  acc=val_acc.avg, auc=val_auroc.avg))
 
                 best = False
                 if val_acc.avg > best_acc:
-                    print("Val Acc \033[0;32m improved \033[0;0m from {acc_past:.4f} to {acc_new:.4f} ".format(acc_past=best_acc, acc_new=val_acc.avg))
+                    print("Val Acc improved from {acc_past:.4f} to {acc_new:.4f} ".format(acc_past=best_acc, acc_new=val_acc.avg))
                     best_acc = val_acc.avg
                     best = True
                     patience = 0
 
                 else:            
-                    print("Val Acc does \033[1;31m NOT \033[0;0m improve from {acc:.4f}".format(acc=best_acc))
+                    print("Val Acc does NOT improve from {acc:.4f}".format(acc=best_acc))
                     patience += 1
 
                 save_model(os.path.join(checkpoint_dir, config.model_name), epoch, student_model, optimizer, lr_scheduler, device_ids, best)
-            
-            # ----------------------End: validation----------------------
+
                 student_model.train()
                 if (patience>=config.early_stop):
-                    # early stopping
+                    # Early stopping
                     early_stop =  True
                     break
                 
@@ -432,8 +416,7 @@ def main(config):
             print("Early Stopping...")
             break
                 
-    # ===================Start: Testing=====================
-
+    #  Testing
     pretrained_weights = torch.load(str('_'.join([os.path.join(checkpoint_dir, config.model_name ),'best.pth'])))['state_dict']
     student_model.load_state_dict(pretrained_weights)
     student_model.eval()
@@ -468,11 +451,11 @@ def main(config):
     test_recall = recall_score(y_true=y_true, y_pred=np.argmax(y_pred, axis=1))
     test_f1 = f1_score(y_true=y_true, y_pred=np.argmax(y_pred, axis=1))
     
-    sys.stdout.write("\033[0;32m Test loss: {loss:.4f} \n Test ACC: {acc:.4f} \n Test AUC: {auc:.4f} \n Test Precision: {pre:.4f} \n Test Recall: {rec:.4f} \n Test F1: {f1:.4f} \033[0;0m\n"
+    sys.stdout.write("Test loss: {loss:.4f} \n Test ACC: {acc:.4f} \n Test AUC: {auc:.4f} \n Test Precision: {pre:.4f} \n Test Recall: {rec:.4f} \n Test F1: {f1:.4f} \n"
             .format(loss=test_loss.avg, acc=test_acc.avg, auc=test_auroc, pre=test_precision, rec=test_recall, f1=test_f1))
 
         
-    # ---------------------- Start: Calculate Recal @ K ----------------------
+    #  Calculate Recal @ K 
     ref = [] 
     y_ref = [] 
     with torch.no_grad():
@@ -487,21 +470,18 @@ def main(config):
                 ref = torch.cat((ref, batch_com_feat.cpu().detach()), axis=0) if len(ref) else batch_com_feat.cpu().detach()
                 
     recall = recall_at_k(ref=ref, query=query, y_ref=y_ref, y_query=y_true, fill_diag=False)
-    sys.stdout.write("\033[0;32m Test Recall @ 1: {rc:.4f} \033[0;0m\n".format(rc=recall))
-    # ----------------------End:  Calculate Recal @ K ----------------------
+    sys.stdout.write("Test Recall @ 1: {rc:.4f} ".format(rc=recall))
     
-    # ---------------------- Save embedding space ----------------------
+    #  Save embedding space 
     with open(os.path.join(checkpoint_dir, config.model_name + '_emb.npy'), 'wb') as fileout:
         np.save(fileout, query.numpy())
     with open(os.path.join(checkpoint_dir, config.model_name + '_emb_train.npy'), 'wb') as fileout:
         np.save(fileout, ref.numpy())
-    # ---------------------- End: Save embedding space ----------------------
     
     return test_acc.avg, best_acc
-    # ----------------------End: testing--------------------
 
 if __name__ == "__main__":
-    with open("../configs/resnet_kd_fr_mv.yaml", 'r') as stream: # Change Dataset here
+    with open("../configs/resnet_kd_fr_mv.yaml", 'r') as stream: 
         config = yaml.safe_load(stream)
     config = easydict.EasyDict(config)
     model_name  = config.model_name
