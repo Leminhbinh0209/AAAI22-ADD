@@ -51,25 +51,20 @@ import pandas as pd
 import albumentations
 import albumentations.pytorch
 import importlib
-
-
 from distiller_zoo import Attention, HintLoss, Correlation, VIDLoss, RKDLoss,  PKT, DistillKL, Frequency, AttentionPx, Multiview, NonLocal
-
-
-# import torch.distributed as dist
 import torch.multiprocessing as mp
 import torch.utils.data.distributed
 from utils import *
 from resnet_baseline import *
 
 os.environ["CUDA_DEVICE_ORDER"] = "PCI_BUS_ID" 
-os.environ["CUDA_VISIBLE_DEVICES"] = "3"
+os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 
 # Set random seed
 random_seed = 42
 torch.manual_seed(random_seed)
 torch.cuda.manual_seed(random_seed)
-torch.cuda.manual_seed_all(random_seed) # if use multi-GPU
+torch.cuda.manual_seed_all(random_seed) 
 torch.backends.cudnn.deterministic = True
 torch.backends.cudnn.benchmark = False
 np.random.seed(random_seed)
@@ -99,12 +94,12 @@ class FaceDataset(Dataset):
         img_path =  self.img_paths[index]
         label = self.labels[index]
         img_raw = Image.open(img_path)
-        if self.compression_qf < 100: # If compression provided
-            img_com = JPEGcompression(img, self.compression_qf) # Using JPEG compression
+        if self.compression_qf < 100: 
+            img_com = JPEGcompression(img_raw, self.compression_qf) 
         else:
-            img_com = Image.open(img_path.replace('raw', self.quality)) # Load image from video compress
+            img_com = Image.open(img_path.replace('raw', self.quality)) 
             
-        if random() < 0.5: # Horizontal flip
+        if random() < 0.5: 
             img_raw = img_raw.transpose(Image.FLIP_LEFT_RIGHT)
             img_com = img_com.transpose(Image.FLIP_LEFT_RIGHT)
             
@@ -122,7 +117,7 @@ class FaceDataset(Dataset):
         return len(self.labels)
     
 def main(config):
-    ########### LOAD DATA ################
+    # ---------------------- LOAD DATA ----------------------
     current_time = str(time())[:10]
     real_type = 'real'
     fake_type = config.dataset
@@ -161,7 +156,7 @@ def main(config):
     test_loader = DataLoader(test_dataset, batch_size=config.batch_size, shuffle=False, num_workers=config.num_workers)
 
     
-     ########### DEFINE MODEL ###############
+    # ---------------------- DEFINE MODEL ----------------------
     # Create logger and checkpoints directory
     logger_dir = os.path.join(config.result_dir, config.dataset, config.data_quality)
     checkpoint_dir = os.path.join(config.checkpoint_dir, config.dataset, config.data_quality)
@@ -210,7 +205,7 @@ def main(config):
     trainable_list = nn.ModuleList([])
     trainable_list.append(student_model)
 
-    ######### Loss and Optimizer ##############
+    # ---------------------- Loss and Optimizer ----------------------
     criterion_cls = nn.CrossEntropyLoss().cuda()   
 
     if config.is_proj:
@@ -269,12 +264,12 @@ def main(config):
         total_steps=None)
     
         
-    ########## BACKBONES FEATURE ############
+    # ---------------------- Backbone features ----------------------
     backbone_layers = []
     if "efficientnetb0" in config.model_name: 
         backbone_layers = config.backbone_layers_b0
     
-    ######### TRAINING PHASE ###############
+    # ---------------------- Training phase  ----------------------
     print(f"***Start training with {fake_type} {config.data_quality}***")
     best_acc = 0.0
     watch_interval = 0
@@ -319,7 +314,7 @@ def main(config):
             middle_raw_tensors, batch_raw_feat, batch_raw_pred = teacher_model(batch_data_raw, True, backbone_layers)
             middle_com_tensors, batch_com_feat, batch_com_pred = student_model(batch_data_com, True, backbone_layers)
             
-            # ----------------------Start: losses----------------------
+            # ===================Start: losses===================
             
             loss_fr = 0
             loss_kd = 0
@@ -360,7 +355,7 @@ def main(config):
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
-            lr_scheduler.step() ### If One cycle learning schedule
+            lr_scheduler.step()
             # ----------------------End: backward----------------------
             
             acc1 = accuracy(batch_com_pred, batch_target)
@@ -378,8 +373,7 @@ def main(config):
             sys.stdout.write("Train Epoch: {e:02d} Batch: {batch:04d}/{size:04d} | L_F: {l_fr:.4f} | Loss_KD: {l_kd:.4f} |  Loss_CE: {l_ce:.4f} | Loss:{loss:.4f} | Acc: {acc:.4f} | AUC: {auc:.4f}"\
                              .format(e=epoch, batch=batch_idx+1, size=len(train_loader), \
                                      l_fr=train_fr.avg, l_kd=train_kd.avg, l_ce=train_ce.avg, \
-                                     loss=train_loss.avg, acc=train_acc.avg, auc=train_auroc.avg))
-            
+                                     loss=train_loss.avg, acc=train_acc.avg, auc=train_auroc.avg))            
             
             # ===================Start: validation=====================
             if (watch_interval == len(train_loader)//10) & (epoch >= config.warm_up):
@@ -390,7 +384,7 @@ def main(config):
                 val_loss = AverageMeter()
                 val_acc = AverageMeter()
                 val_auroc = AverageMeter()
-                # validation loop
+
                 with torch.no_grad():
                     for batch_idx, (batch_data_raw, batch_data_com, batch_target) in enumerate(val_loader):
 
@@ -414,7 +408,6 @@ def main(config):
                 sys.stdout.write("\n\t\tValidation:  Loss_CE: {l_ce:.4f} | Acc: {acc:.4f} | AUC: {auc:.4f}\n"
                                 .format( l_ce=val_ce.avg,  acc=val_acc.avg, auc=val_auroc.avg))
 
-                # best validation acc
                 best = False
                 if val_acc.avg > best_acc:
                     print("Val Acc \033[0;32m improved \033[0;0m from {acc_past:.4f} to {acc_new:.4f} ".format(acc_past=best_acc, acc_new=val_acc.avg))
@@ -447,7 +440,6 @@ def main(config):
     test_loss = AverageMeter()
     test_acc = AverageMeter()
     test_auroc = AverageMeter()
-    # testing loop
     y_true = []
     y_pred = []
     query = []
@@ -480,7 +472,7 @@ def main(config):
             .format(loss=test_loss.avg, acc=test_acc.avg, auc=test_auroc, pre=test_precision, rec=test_recall, f1=test_f1))
 
         
-    # -------- Start: Calculate Recal @ K --------
+    # ---------------------- Start: Calculate Recal @ K ----------------------
     ref = [] 
     y_ref = [] 
     with torch.no_grad():
@@ -496,17 +488,18 @@ def main(config):
                 
     recall = recall_at_k(ref=ref, query=query, y_ref=y_ref, y_query=y_true, fill_diag=False)
     sys.stdout.write("\033[0;32m Test Recall @ 1: {rc:.4f} \033[0;0m\n".format(rc=recall))
-    # --------End:  Calculate Recal @ K --------
+    # ----------------------End:  Calculate Recal @ K ----------------------
     
-    # -------- Save embedding space --------
+    # ---------------------- Save embedding space ----------------------
     with open(os.path.join(checkpoint_dir, config.model_name + '_emb.npy'), 'wb') as fileout:
         np.save(fileout, query.numpy())
     with open(os.path.join(checkpoint_dir, config.model_name + '_emb_train.npy'), 'wb') as fileout:
         np.save(fileout, ref.numpy())
-    # -------- End: Save embedding space --------
+    # ---------------------- End: Save embedding space ----------------------
     
     return test_acc.avg, best_acc
-    # ----------------------End: testing----------------------
+    # ----------------------End: testing--------------------
+
 if __name__ == "__main__":
     with open("../configs/resnet_kd_fr_mv.yaml", 'r') as stream: # Change Dataset here
         config = yaml.safe_load(stream)
