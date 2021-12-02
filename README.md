@@ -1,7 +1,8 @@
 # ADD: Frequency Attention and Multi-View based Knowledge Distillation to Detect Low-Quality Compressed Deepfake Images
-Anonymous, "ADD: Frequency Attention and Multi-View based Knowledge Distillation to Detect Low-Quality Compressed Deepfake Images."  <br /> 
-Thirty-Sixth AAAI Conference on Artificial Intelligence. 2022. Canada <br /> 
-Paper ID 676
+Binh M. Le & Simon S. Woo, "ADD: Frequency Attention and Multi-View based Knowledge Distillation to Detect Low-Quality Compressed Deepfake Images."  <br /> 
+<img alt="GitHub top language" src="https://img.shields.io/github/languages/top/Leminhbinh0209/ADD?style=for-the-badge" height="25"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/Leminhbinh0209/ADD?style=for-the-badge" height="25"><img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/Leminhbinh0209/ADD?style=for-the-badge" height="25">
+*Thirty-Sixth AAAI Conference on Artificial Intelligence. 2022. Canada* <br /> 
+
 
 
 
