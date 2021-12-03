@@ -12,7 +12,13 @@
 <p align="center">
     <img src="https://i.ibb.co/KmxVRQw/overall-pipeline.png" width="960" alt="overall pipeline">
 <p>
-
+    
+## Installation
+- Ubuntu 18.04.5 LTS
+- CUDA 10.2
+- Python 3.6.10
+- python packages are detailed separately in ```requirements.txt```.
+```
 ## Datasets 
 * NeuralTextures [[Dataset]](https://github.com/ondyari/FaceForensics) [[Paper]](https://arxiv.org/abs/1904.12356) 
 * DeepFakes [[Dataset]](https://github.com/ondyari/FaceForensics)  [[GitHub]](https://github.com/deepfakes/faceswap)
