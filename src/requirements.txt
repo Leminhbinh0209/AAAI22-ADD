@@ -1,0 +1,16 @@
+
+albumentations==0.5.0
+dlib==19.21.0
+dlutils==0.0.12
+dm-tree==0.1.5
+dnnlib @ https://github.com/podgorskiy/dnnlib/releases/download/0.0.1/dnnlib-0.0.1-py3-none-any.whl
+docutils==0.16
+easydict==1.9
+efficientnet @ git+https://github.com/qubvel/efficientnet@8984e988ecccd9c3a15be2e793991845619a8a26
+efficientnet-pytorch==0.7.0
+faiss==1.6.3
+h5py==2.10.0
+numpy==1.19.5
+opencv-python==4.4.0.44
+opt-einsum==3.3.0
+orthopy==0.8.5

@@ -1,0 +1,61 @@
+model_name: 'resnet50_kd_valacc_img128'
+stem: False
+dataset: 'faceshifter'
+data_quality: 'c23'
+compression_qf: 100
+
+cuda: True
+n_gpu: 2 
+num_workers: 32
+tensorboard: False
+
+pretrained_path: 'resnet50_baseline_valacc_img128_best.pth'
+checkpoint_dir: '../checkpoints/'
+result_dir: '../results/'
+
+image_size: 128
+batch_size: 144
+lr: 0.0002
+weight_decay: 0.0001
+momentum: 0.9
+num_classes: 2
+epochs: 32
+train_steps: 700000
+warmup_steps: 100
+attn_dropout_rate: 0.2
+dropout_rate: 0.1
+
+watch_interval: 200
+warm_up: 4
+early_stop: 10
+
+
+is_proj: False
+lambda_proj: 42.55
+intrinsic_size: 128
+k_ahead: 4
+norm_proj: 'l2'
+
+is_freq: True
+gamma_fr: 1
+kernel_fr: 'l2'
+layer_fr: [0.0, 1.0, 2.0, 0.25]
+
+is_div: False
+kd_T: 4.0
+
+distill: 'swd'
+
+p_swd: 2
+n_theta_swd: 12
+gamma_swd: 100.0
+eta_swd: 50.0
+reduction_swd: 'sum'
+layer_swd: [0.0, 0.5, 2.5, 2.0]
+
+lambda_kd: 16.0
+lambda_ce: 1.0
+lambda_fr: 1.0
+lambda_div: 0.0
+
+layer_atcn : [0.0, 1.0, 1.0, 1.0]
