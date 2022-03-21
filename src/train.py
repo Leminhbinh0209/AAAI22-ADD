@@ -51,7 +51,7 @@ import pandas as pd
 import albumentations
 import albumentations.pytorch
 import importlib
-from distiller_zoo import Attention, HintLoss, Correlation, VIDLoss, RKDLoss,  PKT, DistillKL, Frequency, AttentionPx, Multiview, NonLocal
+from distiller_zoo import Attention, HintLoss, Frequency,  Multiview, NonLocal
 import torch.multiprocessing as mp
 import torch.utils.data.distributed
 from utils import *
