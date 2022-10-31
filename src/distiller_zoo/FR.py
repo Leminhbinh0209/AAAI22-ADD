@@ -11,6 +11,7 @@ class Frequency(nn.Module):
         self.kernel = kernel
         self.gamma = gamma
         self.reduction = reduction
+        assert self.kernel in ['l2', 'cosine', 'gaussian'], f"Undefined {kernel} kernel"
         
     def forward(self, g_s, g_t, weights):
         return [self.frequecy_loss(f_s, f_t) * w for f_s, f_t, w in zip(g_s, g_t, weights) if w > 0]
@@ -23,7 +24,7 @@ class Frequency(nn.Module):
             s_out:  B x C x W x H
         output: loss
         """
-        assert self.kernel in ['l2', 'cosine', 'gaussian']
+        
         reduction_ = getattr(torch, self.reduction)
 
         if mask is not None:
