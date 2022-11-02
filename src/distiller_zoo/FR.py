@@ -32,6 +32,9 @@ class Frequency(nn.Module):
             s_out = torch.einsum("bcwh, b -> bcwh", s_out, mask)
         t_out_fft = torch.rfft(t_out, 2, normalized=True, onesided=False) / np.sqrt(t_out.size(-2) * t_out.size(-1)) # B x C x W x H x 2
         s_out_fft = torch.rfft(s_out, 2, normalized=True, onesided=False) / np.sqrt(s_out.size(-2) * s_out.size(-1)) # B x C x W x H x 2
+        # NOTE: For later torch version use the equivalence: 
+        # t_out_fft = torch.view_as_real(torch.fft.fft2(t_out, dim=(-2,-1), norm="ortho")) / np.sqrt(t_out.size(-2) * t_out.size(-1)) # B x C x W x H x 2
+        # s_out_fft = torch.view_as_real(torch.fft.fft2(s_out, dim=(-2,-1), norm="ortho")) / np.sqrt(s_out.size(-2) * s_out.size(-1)) # B x C x W x H x 2
 
         if self.kernel == 'l2':
             entriloss = torch.norm(t_out_fft-s_out_fft, dim=-1)**2  # B x C x W x H 
