@@ -35,13 +35,14 @@
 ##  Citation
 *Star (⭐) if you find it useful, and consider to cite our work*  
 
-
-@inproceedings{woo2022add,
+```
+@inproceedings{le2022add,
   title={ADD: Frequency attention and multi-view based knowledge distillation to detect low-quality compressed deepfake images},
-  author={Woo, Simon and others},
+  author={Le, Binh M and Woo, Simon S},
   booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
   volume={36},
   number={1},
   pages={122--130},
   year={2022}
 }
+```
